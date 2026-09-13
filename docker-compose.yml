@@ -1,0 +1,54 @@
+# Local development stack: PostgreSQL + FastAPI + Next.js.
+#
+# Deliberately three plain services. Phase 1 does not need a queue, a cache,
+# a reverse proxy or an orchestrator, and adding them now would buy nothing
+# but setup failures.
+#
+#   cp .env.example backend/.env   # then set a real SECRET_KEY
+#   docker compose up --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agriguru}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agriguru}
+      POSTGRES_DB: ${POSTGRES_DB:-agriguru}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # The API waits for this, so it cannot start against a database that is
+      # still initialising.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agriguru}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      POSTGRES_HOST: db
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # The dataset is read only by the training command, not at runtime.
+      - ./data:/app/../data:ro
+
+  web:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:

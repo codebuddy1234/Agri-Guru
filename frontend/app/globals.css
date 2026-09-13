@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-soil-50 text-soil-900 antialiased;
+  }
+
+  /* Devanagari needs a little more line height than Latin to stay legible,
+     especially at the small sizes used for help text. */
+  :lang(mr) body,
+  :lang(hi) body {
+    line-height: 1.7;
+  }
+
+  /* Number inputs: hide the spinner. On a phone it is a tiny tap target next
+     to a large one, and farmers type these values rather than step them. */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Respect the OS reduced-motion setting rather than animating regardless. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

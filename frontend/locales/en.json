@@ -1,0 +1,189 @@
+{
+  "common": {
+    "appName": "AgriGuru AI",
+    "tagline": "Smart farming decisions, in your language",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "retry": "Try again",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "register": "Create account",
+    "comingSoon": "Coming Soon",
+    "availableNow": "Available Now",
+    "language": "Language",
+    "optional": "optional",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "offline": "Cannot reach the server. Check your internet connection."
+  },
+  "landing": {
+    "heroTitle": "Know what to grow, before you sow",
+    "heroSubtitle": "AgriGuru AI studies your soil and weather values and suggests crops that match them. Free, simple, and in your own language.",
+    "getStarted": "Get started",
+    "haveAccount": "I already have an account",
+    "howItWorksTitle": "How it works",
+    "step1Title": "Enter your soil and weather values",
+    "step1Body": "Nitrogen, phosphorus, potassium, temperature, humidity, pH and rainfall.",
+    "step2Title": "Get a crop suggestion",
+    "step2Body": "A trained model compares your values against 22 crops and ranks the closest matches.",
+    "step3Title": "Save and revisit",
+    "step3Body": "Every recommendation is saved so you can look back at what you entered and when.",
+    "honestyTitle": "What AgriGuru is, and is not",
+    "honestyBody": "AgriGuru suggests crops by matching the numbers you enter against patterns in an agricultural dataset. It does not know your field's history, your irrigation, your market, or this season's forecast. Treat it as a starting point for a conversation with an agricultural officer — not as a replacement for one."
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to see your recommendations",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "It takes less than a minute",
+    "email": "Email address",
+    "password": "Password",
+    "passwordHint": "At least 8 characters, with one letter and one number",
+    "fullName": "Your name",
+    "mobile": "Mobile number",
+    "district": "District",
+    "taluka": "Taluka",
+    "village": "Village",
+    "noAccount": "New to AgriGuru?",
+    "hasAccount": "Already registered?",
+    "signingIn": "Signing in…",
+    "creating": "Creating your account…"
+  },
+  "dashboard": {
+    "greeting": "Namaskar, {name}",
+    "greetingNoName": "Namaskar",
+    "subtitle": "What would you like help with today?",
+    "yourLocation": "Your location",
+    "locationNotSet": "Location not set",
+    "recentTitle": "Recent recommendations",
+    "recentEmpty": "You have not saved any recommendations yet.",
+    "viewAll": "View all",
+    "profile": "Profile"
+  },
+  "modules": {
+    "crop_recommendation": {
+      "title": "Crop Recommendation",
+      "description": "Find crops that suit your soil and weather"
+    },
+    "disease_detection": {
+      "title": "Crop Disease Detection",
+      "description": "Identify plant disease from a photo"
+    },
+    "weather": {
+      "title": "Weather",
+      "description": "Local forecast for your farm"
+    },
+    "market_prices": {
+      "title": "Market Prices",
+      "description": "Mandi rates and price trends"
+    },
+    "fertilizer": {
+      "title": "Fertiliser Advice",
+      "description": "How much to apply, and when"
+    },
+    "yield_prediction": {
+      "title": "Yield Prediction",
+      "description": "Estimate your harvest"
+    },
+    "schemes": {
+      "title": "Government Schemes",
+      "description": "Schemes you may be eligible for"
+    },
+    "expert_review": {
+      "title": "Expert Review",
+      "description": "Have an agriculture expert check your case"
+    }
+  },
+  "crop": {
+    "title": "Crop Recommendation",
+    "subtitle": "Enter your soil test and weather values. Every field is required.",
+    "soilSection": "Soil nutrients",
+    "weatherSection": "Weather and water",
+    "nitrogen": "Nitrogen (N)",
+    "nitrogenHelp": "Nitrogen level from your soil test",
+    "phosphorus": "Phosphorus (P)",
+    "phosphorusHelp": "Phosphorus level from your soil test",
+    "potassium": "Potassium (K)",
+    "potassiumHelp": "Potassium level from your soil test",
+    "temperature": "Average temperature",
+    "temperatureHelp": "Typical temperature in your area during the growing season",
+    "humidity": "Humidity",
+    "humidityHelp": "Typical relative humidity in your area",
+    "ph": "Soil pH",
+    "phHelp": "Soil acidity from your soil test. 7 is neutral.",
+    "rainfall": "Rainfall",
+    "rainfallHelp": "Expected rainfall over the growing season",
+    "npkUnitWarningTitle": "About the N, P and K values",
+    "npkUnitWarningBody": "These are ratio values as used in the training dataset. They are NOT kilograms per hectare. If your soil health card reports kg/ha, those numbers are on a different scale and will give a misleading result.",
+    "acceptedRange": "Accepted: {min} to {max}",
+    "submit": "Get recommendation",
+    "submitting": "Checking your values…",
+    "linkFarm": "Link to a farm",
+    "noFarm": "Do not link to a farm"
+  },
+  "result": {
+    "title": "Recommended crop",
+    "confidence": "Confidence",
+    "confidenceHigh": "The model matched your values closely.",
+    "confidenceMedium": "The model found a reasonable match, but other crops were close.",
+    "confidenceLow": "The model was unsure. Treat this as one option among several.",
+    "alternativesTitle": "Other crops that matched",
+    "noAlternatives": "No other crop came close for these values.",
+    "whyTitle": "Why this recommendation?",
+    "whyBody": "You entered nitrogen {nitrogen}, phosphorus {phosphorus}, potassium {potassium}, temperature {temperature}°C, humidity {humidity}%, pH {ph} and rainfall {rainfall}mm. The trained model compared these against patterns for 22 crops and ranked {crop} as the closest match.",
+    "yourInputs": "Values you entered",
+    "outOfRangeTitle": "Some values are outside what the model has seen",
+    "outOfRangeBody": "These values fall outside the range in the training data: {fields}. The model is extrapolating, so this result is less reliable than usual.",
+    "disclaimerTitle": "Please read",
+    "disclaimerBody": "This is a data-driven suggestion based only on the seven values you entered. It does not account for your field history, irrigation, seed availability, market prices or this season's forecast. Confirm with your local agriculture officer before sowing.",
+    "modelInfo": "Model {version} · {algorithm}",
+    "newRecommendation": "New recommendation",
+    "viewHistory": "View history",
+    "saved": "Saved to your history"
+  },
+  "history": {
+    "title": "Your recommendations",
+    "subtitle": "Every recommendation you have received, newest first.",
+    "empty": "You have not received any recommendations yet.",
+    "emptyAction": "Get your first recommendation",
+    "detailTitle": "Recommendation details",
+    "recordedOn": "Recorded on",
+    "loadMore": "Load more"
+  },
+  "profile": {
+    "title": "Your profile",
+    "subtitle": "This information helps us tailor future features to your area.",
+    "personalSection": "About you",
+    "locationSection": "Where you farm",
+    "languageSection": "Language",
+    "farmsSection": "Your farms",
+    "noFarms": "You have not added a farm yet.",
+    "addFarm": "Add a farm",
+    "farmName": "Farm name",
+    "farmArea": "Area",
+    "soilType": "Soil type",
+    "irrigation": "Irrigation source",
+    "updated": "Profile updated"
+  },
+  "errors": {
+    "INVALID_INPUT": "Some values are not valid. Please check the highlighted fields.",
+    "UNAUTHORIZED": "Please sign in to continue.",
+    "FORBIDDEN": "You do not have permission to do that.",
+    "NOT_FOUND": "We could not find what you were looking for.",
+    "CONFLICT": "An account with these details already exists.",
+    "MODEL_UNAVAILABLE": "Crop recommendation is temporarily unavailable. Other features still work.",
+    "PREDICTION_FAILED": "We could not generate a recommendation. Please try again.",
+    "DATABASE_UNAVAILABLE": "The service is temporarily unavailable. Please try again shortly.",
+    "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
+    "NETWORK": "Cannot reach the server. Check your internet connection."
+  },
+  "crops": {
+    "rice": "Rice", "maize": "Maize", "chickpea": "Chickpea", "kidneybeans": "Kidney beans",
+    "pigeonpeas": "Pigeon peas", "mothbeans": "Moth beans", "mungbean": "Mung bean",
+    "blackgram": "Black gram", "lentil": "Lentil", "pomegranate": "Pomegranate",
+    "banana": "Banana", "mango": "Mango", "grapes": "Grapes", "watermelon": "Watermelon",
+    "muskmelon": "Muskmelon", "apple": "Apple", "orange": "Orange", "papaya": "Papaya",
+    "coconut": "Coconut", "cotton": "Cotton", "jute": "Jute", "coffee": "Coffee"
+  }
+}
