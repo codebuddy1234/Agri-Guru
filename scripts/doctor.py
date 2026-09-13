@@ -154,6 +154,34 @@ elif len(secret) < 32:
 else:
     ok(f"SECRET_KEY is set ({len(secret)} chars)")
 
+# .env.example is committed to git. A real secret pasted there is published
+# to everyone who can read the repository, and stays in the history. This is
+# an easy mistake to make, because the file looks like the one to edit.
+example = ROOT / ".env.example"
+if example.exists():
+    for line in example.read_text(encoding="utf-8").splitlines():
+        if line.startswith("SECRET_KEY="):
+            example_secret = line.split("=", 1)[1].strip()
+            placeholder = (
+                "change-me" in example_secret.lower()
+                or "your-secret" in example_secret.lower()
+            )
+            if not placeholder and len(example_secret) >= 32:
+                fail(
+                    "a real-looking SECRET_KEY is committed in .env.example",
+                    "that file is tracked by git, so this key is public to anyone\n"
+                    "         who can read the repository.\n"
+                    "         1. Generate a NEW key and put it in backend/.env "
+                    "(not .env.example)\n"
+                    "         2. Restore the placeholder in .env.example\n"
+                    "         3. Commit and push that change\n"
+                    "         Rotating the key is what matters: it makes the "
+                    "exposed one useless.",
+                )
+            else:
+                ok(".env.example holds a placeholder, not a real key")
+            break
+
 cors = env.get("CORS_ORIGINS", "")
 if cors:
     origins = [o.strip() for o in cors.split(",")]
