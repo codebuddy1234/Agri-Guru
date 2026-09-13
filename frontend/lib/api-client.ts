@@ -116,6 +116,26 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   } catch {
     // fetch only rejects on a network-level failure, so this is genuinely
     // "cannot reach the server" rather than an application error.
+    //
+    // The message a farmer sees ("check your internet connection") is right
+    // for them but misleading during local development, where the usual cause
+    // is the backend not running or CORS rejecting the origin. Both look
+    // identical to fetch(), so point the developer at the difference here
+    // rather than changing the user-facing copy.
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        `[AgriGuru] Request to ${BASE_URL}${path} failed at the network level.\n` +
+          "Nothing was received from the API, so this is not a validation or " +
+          "database error.\nUsual causes, in order:\n" +
+          "  1. The backend is not running -> cd backend && uvicorn app.main:app --reload\n" +
+          "  2. The backend crashed at startup (often SECRET_KEY still set to the " +
+          ".env.example placeholder) -> check that terminal\n" +
+          "  3. CORS: this page's origin is not in CORS_ORIGINS in backend/.env " +
+          "(localhost and 127.0.0.1 are different origins)\n" +
+          "  4. NEXT_PUBLIC_API_BASE_URL points somewhere wrong\n" +
+          "Run `python scripts/doctor.py` from the project root to check all of these.",
+      );
+    }
     throw new ApiClientError("NETWORK", "Cannot reach the server.", 0);
   }
 

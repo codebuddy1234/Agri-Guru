@@ -95,6 +95,75 @@ npm run dev
 
 Open http://localhost:3000 — it redirects to `/mr` (Marathi is the default).
 
+## Troubleshooting
+
+**Run this first — it checks everything and tells you exactly what is wrong:**
+
+```bash
+python scripts/doctor.py
+```
+
+It verifies `.env`, `SECRET_KEY`, CORS, the PostgreSQL connection, the four
+tables, the model artifacts, and whether the API and frontend are actually up.
+
+### "Cannot reach the server. Check your internet connection."
+
+This is **not** a database problem. It means the browser got *no HTTP response
+at all*, so the request never reached the backend. (A broken database gives you
+"The service is temporarily unavailable" instead — that comes back as a 503
+*from* the backend, which means the backend was reachable.)
+
+Causes, in the order they actually happen:
+
+| # | Cause | Check |
+|---|---|---|
+| 1 | Backend not running | `curl http://localhost:8000/api/v1/health` |
+| 2 | Backend **crashed at startup** | Look at the uvicorn terminal |
+| 3 | CORS blocks the origin | `CORS_ORIGINS` in `backend/.env` |
+| 4 | Wrong API URL | `NEXT_PUBLIC_API_BASE_URL` |
+
+**Cause 2 is the most common on a first setup.** If you copied `.env.example`
+without generating a `SECRET_KEY`, the backend refuses to start:
+
+```
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Settings
+SECRET_KEY
+  Value error, SECRET_KEY is still the placeholder from .env.example.
+```
+
+That is deliberate — a guessable signing key would let anyone forge a login
+token. Fix it:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+# paste the output as SECRET_KEY in backend/.env, then restart uvicorn
+```
+
+Run the backend in its **own terminal and keep it visible**. If it exits
+immediately, the error printed there is your real problem.
+
+**Cause 3** catches people out because `localhost` and `127.0.0.1` are
+*different origins* to a browser. If you open the site on one and only the other
+is listed in `CORS_ORIGINS`, every request is blocked and looks exactly like the
+server being down. List both in development:
+
+```
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+```
+
+In development the browser console also prints a `[AgriGuru]` warning listing
+these causes when a request fails at the network level.
+
+### Other common issues
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `relation "users" does not exist` | Migrations not run | `cd backend && alembic upgrade head` |
+| Predictions return 503, everything else works | Model not trained | `python -m app.ml.crop_recommendation.training.train` |
+| `password authentication failed` | `POSTGRES_PASSWORD` mismatch, or the role does not exist | `ALTER USER agriguru WITH PASSWORD '…';` |
+| `database "agriguru" does not exist` | Database not created | `createdb agriguru` |
+| `pytest` fails to connect | No test database | `createdb agriguru_test` |
+
 ## Testing
 
 ```bash
