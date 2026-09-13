@@ -2,7 +2,7 @@
   "model_name": "crop_recommendation",
   "model_version": "v1.0.0",
   "algorithm": "RandomForest",
-  "trained_at": "2026-09-13T09:44:29.537820+00:00",
+  "trained_at": "2026-09-13T14:10:06.828751+00:00",
   "random_state": 42,
   "dataset": {
     "file": "Crop_recommendation.csv",
@@ -53,16 +53,16 @@
       "GaussianNB": {
         "cv_macro_f1_mean": 0.9948713284300658,
         "cv_macro_f1_std": 0.004192097445921013,
-        "cv_log_loss": 0.015755990890489232,
+        "cv_log_loss": 0.01575599089048923,
         "cv_saturated_share": 0.6073863636363637,
         "cv_mean_top_probability": 0.9918685150643037
       },
       "LogisticRegression": {
         "cv_macro_f1_mean": 0.9678236006626216,
         "cv_macro_f1_std": 0.006765232166249332,
-        "cv_log_loss": 0.23648416312296022,
+        "cv_log_loss": 0.23648416312102946,
         "cv_saturated_share": 0.0,
-        "cv_mean_top_probability": 0.8239339190675209
+        "cv_mean_top_probability": 0.8239339190680307
       },
       "DecisionTree": {
         "cv_macro_f1_mean": 0.9852225899230891,
