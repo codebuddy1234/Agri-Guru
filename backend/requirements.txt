@@ -1,0 +1,24 @@
+# --- Web framework ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.7.1      # typed .env configuration
+email-validator==2.2.0        # EmailStr validation
+
+# --- Database ---
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3        # maintained successor to psycopg2
+
+# --- Security ---
+bcrypt==4.2.1                 # password hashing, used directly (see note below)
+pyjwt==2.10.1                 # JWT encode/decode
+
+# --- ML inference only (training deps live in requirements-dev.txt) ---
+scikit-learn==1.6.1
+numpy==2.2.1
+joblib==1.4.2
+
+# Note: passlib is NOT used. Its last release (1.7.4, 2020) reads
+# bcrypt.__about__, which bcrypt 4.1+ removed, so every hash call logs a
+# trapped AttributeError. The bcrypt package alone covers our needs.
