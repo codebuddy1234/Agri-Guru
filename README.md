@@ -95,6 +95,39 @@ npm run dev
 
 Open http://localhost:3000 — it redirects to `/mr` (Marathi is the default).
 
+> **The backend and frontend are two separate servers.** Both must be running,
+> each in its own terminal. If only the frontend is up, every action fails with
+> "Cannot reach the server" — see [Troubleshooting](#troubleshooting).
+
+### Windows (PowerShell)
+
+Windows PowerShell 5.1 does not support `&&`, so run each line separately.
+
+**Terminal 1 — backend:**
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+copy ..\.env.example .env          # then set a real SECRET_KEY
+alembic upgrade head
+python -m app.ml.crop_recommendation.training.train
+uvicorn app.main:app --reload
+```
+
+**Terminal 2 — frontend:**
+```powershell
+cd frontend
+npm install
+copy .env.example .env.local
+npm run dev
+```
+
+If PowerShell blocks `Activate.ps1`, allow scripts for the current user once:
+`Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
+
+Check PostgreSQL is running with `Get-Service -Name "postgresql*"`.
+
 ## Troubleshooting
 
 **Run this first — it checks everything and tells you exactly what is wrong:**

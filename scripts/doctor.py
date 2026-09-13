@@ -34,6 +34,36 @@ if not sys.stdout.isatty() or os.environ.get("NO_COLOR"):
 
 problems: list[str] = []
 
+IS_WINDOWS = os.name == "nt"
+
+
+def in_dir(directory: str, command: str) -> str:
+    """Format a "cd X then run Y" instruction for the current shell.
+
+    Windows PowerShell 5.1 (still the default on Windows 10/11) does not
+    support `&&`, so a copy-pasted `cd backend && uvicorn ...` fails with a
+    confusing parser error. Print two lines there instead.
+    """
+    if IS_WINDOWS:
+        return f"cd {directory}\n         {command}"
+    return f"cd {directory} && {command}"
+
+
+def postgres_start_hint() -> str:
+    if IS_WINDOWS:
+        return (
+            "start the PostgreSQL service:\n"
+            '         Get-Service -Name "postgresql*"        # find the exact name\n'
+            '         Start-Service -Name "postgresql-x64-16"  # then start it\n'
+            "         (or open services.msc and start it there)"
+        )
+    if sys.platform == "darwin":
+        return "start PostgreSQL:  brew services start postgresql@16"
+    return (
+        "start PostgreSQL:  sudo service postgresql start\n"
+        "         (macOS: brew services start postgresql@16)"
+    )
+
 
 def ok(msg: str) -> None:
     print(f"  {GREEN}[ok]{RESET}   {msg}")
@@ -151,8 +181,7 @@ dbname = env.get("POSTGRES_DB", "agriguru")
 if not port_open(host, port):
     fail(
         f"nothing is listening on {host}:{port}",
-        "start PostgreSQL:  sudo service postgresql start\n"
-        "         (macOS: brew services start postgresql@16)",
+        postgres_start_hint(),
     )
 else:
     ok(f"PostgreSQL is accepting connections on {host}:{port}")
@@ -182,7 +211,7 @@ else:
         if missing:
             fail(
                 f"tables missing: {', '.join(sorted(missing))}",
-                "cd backend && alembic upgrade head",
+                in_dir("backend", "alembic upgrade head"),
             )
         else:
             ok("all 4 Phase 1 tables exist")
@@ -217,9 +246,9 @@ missing_art = [n for n in needed if not (artifacts / n).exists()]
 if missing_art:
     fail(
         f"missing artifacts: {', '.join(missing_art)}",
-        "cd backend && python -m app.ml.crop_recommendation.training.train\n"
-        "         (without these, login and history still work but predictions "
-        "return 503)",
+        in_dir("backend", "python -m app.ml.crop_recommendation.training.train")
+        + "\n         (without these, login and history still work but "
+        "predictions return 503)",
     )
 else:
     meta = json.loads((artifacts / "metadata.json").read_text())
@@ -232,10 +261,16 @@ section("4. Backend API (port 8000)")
 if not port_open("127.0.0.1", 8000):
     fail(
         "nothing is listening on 127.0.0.1:8000 — the backend is NOT running",
-        "cd backend && uvicorn app.main:app --reload\n"
-        "         Keep this terminal open and WATCH IT. If it exits immediately,\n"
-        "         the error printed there is your real problem (most often the\n"
-        "         SECRET_KEY placeholder checked above).",
+        in_dir("backend", "uvicorn app.main:app --reload")
+        + "\n         Run this in its OWN terminal and KEEP IT OPEN. The backend and\n"
+        "         the frontend are two separate servers; both must stay running.\n"
+        "         If it exits immediately, the error printed there is your real\n"
+        "         problem (most often the SECRET_KEY placeholder checked above)."
+        + (
+            "\n         Activate the venv first: .\\.venv\\Scripts\\Activate.ps1"
+            if IS_WINDOWS
+            else ""
+        ),
     )
 else:
     status, body = http_get("http://127.0.0.1:8000/api/v1/health")
@@ -267,7 +302,7 @@ section("5. Frontend (port 3000)")
 
 if not port_open("127.0.0.1", 3000):
     warn("nothing is listening on 127.0.0.1:3000",
-         "start it with: cd frontend && npm run dev")
+         "start it in a SECOND terminal: " + in_dir("frontend", "npm run dev"))
 else:
     ok("frontend is running on port 3000")
 
